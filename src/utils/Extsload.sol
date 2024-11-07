@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.6.0;
 
-import {IExtsload} from "src/utils/interfaces/IExtsload.sol";
-import {StorageKey} from "src/types/CustomTypes.sol";
+import { IExtsload } from "src/utils/interfaces/IExtsload.sol";
+import { StorageKey } from "src/types/CustomTypes.sol";
 
 /// @notice Enables public storage access for efficient state retrieval by external contracts.
 /// @dev This contract is forked from the uniswap-v4-core repository
@@ -24,7 +24,7 @@ abstract contract Extsload is IExtsload {
             // A left bit-shift of 5 is equivalent to multiplying by 32 but costs less gas.
             mstore(0x20, shl(5, nSlots))
             let end := add(0x40, shl(5, nSlots))
-            for { let memptr := 0x40 } 1 {} {
+            for { let memptr := 0x40 } 1 { } {
                 mstore(memptr, sload(startSlot))
                 memptr := add(memptr, 0x20)
                 startSlot := add(startSlot, 1)
@@ -47,7 +47,7 @@ abstract contract Extsload is IExtsload {
             let end := add(0x40, shl(5, slots.length))
             let calldataptr := slots.offset
             // Return values will start at 64 while calldata offset is 68.
-            for { let memptr := 0x40 } 1 {} {
+            for { let memptr := 0x40 } 1 { } {
                 mstore(memptr, sload(calldataload(calldataptr)))
                 memptr := add(memptr, 0x20)
                 calldataptr := add(calldataptr, 0x20)
