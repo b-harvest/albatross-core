@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import { StorageKey } from "src/types/CustomTypes.sol";
+import { StorageKey, Wallet, Cash } from "src/types/CustomTypes.sol";
 
 /*
  * @title StorageKeyLibrary
@@ -45,6 +45,36 @@ library StorageKeyLibrary {
      * @return Derived storage key
      */
     function derive(StorageKey _storage, string memory _seed) internal pure returns (StorageKey) {
+        return StorageKey.wrap(keccak256(abi.encode(_storage, _seed)));
+    }
+
+    /*
+     * @dev Derive storage key from key and StorageKey type seed
+     * @param _storage StorageKey to derive
+     * @param _seed StorageKey type seed to derive
+     * @return Derived storage key
+     */
+    function derive(StorageKey _storage, StorageKey _seed) internal pure returns (StorageKey) {
+        return StorageKey.wrap(keccak256(abi.encode(_storage, _seed)));
+    }
+
+    /*
+     * @dev Derive storage key from key and Wallet type seed
+     * @param _storage StorageKey to derive
+     * @param _seed Wallet type seed to derive
+     * @return Derived storage key
+     */
+    function derive(StorageKey _storage, Wallet _seed) internal pure returns (StorageKey) {
+        return StorageKey.wrap(keccak256(abi.encode(_storage, _seed)));
+    }
+
+    /*
+     * @dev Derive storage key from key and Cash type seed
+     * @param _storage StorageKey to derive
+     * @param _seed Cash type seed to derive
+     * @return Derived storage key
+     */
+    function derive(StorageKey _storage, Cash _seed) internal pure returns (StorageKey) {
         return StorageKey.wrap(keccak256(abi.encode(_storage, _seed)));
     }
 }

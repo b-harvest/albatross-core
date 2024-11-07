@@ -23,10 +23,5 @@ library RoleType {
     Role internal constant DERIVATIVE_ADMIN = Role.wrap(5);
     Role internal constant FEE_CONFIG_ADMIN = Role.wrap(6);
 
-    Role internal constant GAME_MAKER = Role.wrap(7);
-    Role internal constant GAME_CONTROLLER = Role.wrap(8);
-
-    Role internal constant DOUBLE_BARRIER_OPTION_CONFIG_ADMIN = Role.wrap(1007);
-
     Role internal constant VIEWER = Role.wrap(type(uint96).max);
 }

@@ -21,7 +21,7 @@ library DiamondFacet {
     using SafeCastBytes32 for bytes32;
 
     /// Constant
-    StorageKey private constant _FACET_STORAGE = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.DiamondFacet")));
+    StorageKey private constant _FACET = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.DiamondFacet")));
 
     /**
      * @dev Represents the data structure for a facet.
@@ -68,7 +68,7 @@ library DiamondFacet {
      * @dev Returns the data stored at the specified key.
      */
     function read(bytes4 _funcSelector) private pure returns (Data storage data) {
-        StorageKey key = _FACET_STORAGE.derive(_funcSelector);
+        StorageKey key = _FACET.derive(_funcSelector);
         assembly {
             data.slot := key
         }

@@ -14,7 +14,7 @@ import { Role } from "src/proxy/objects/Role.sol";
 library DiamondRBAC {
     using SafeCastBytes32 for bytes32;
 
-    StorageKey internal constant _ROLE_STORAGE = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.DiamondRBAC")));
+    StorageKey private constant _ROLE = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.DiamondRBAC")));
 
     // Data structure to store role ownership status
     struct Data {
@@ -71,6 +71,6 @@ library DiamondRBAC {
      * @return The storage key associated with the accessor and role.
      */
     function getKey(address _accessor, Role _role) private pure returns (bytes32) {
-        return keccak256(abi.encode(_ROLE_STORAGE, _accessor, _role));
+        return keccak256(abi.encode(_ROLE, _accessor, _role));
     }
 }

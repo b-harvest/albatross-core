@@ -16,11 +16,9 @@ library Context {
     using StorageKeyLibrary for StorageKey;
     using SafeCastBytes32 for bytes32;
 
-    StorageKey private constant _SIGNER_STORAGE =
-        StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.Context.signer")));
-    StorageKey private constant _KEEPER_STORAGE =
-        StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.Context.keeper")));
-    StorageKey private constant _CRITICAL_TASK_COUNT_STORAGE =
+    StorageKey private constant _SIGNER = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.Context.signer")));
+    StorageKey private constant _KEEPER = StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.Context.keeper")));
+    StorageKey private constant _CRITICAL_TASK_COUNT =
         StorageKey.wrap(keccak256(abi.encode("src.proxy.objects.Context.criticalTaskCountInProgress")));
 
     // Data structure to store the context
@@ -34,28 +32,28 @@ library Context {
      * @notice Initialize the context. If the context is already locked, the tx will be reverted.
      */
     function initialize() internal {
-        address originalSigner = _SIGNER_STORAGE.readAddress();
+        address originalSigner = _SIGNER.readAddress();
 
         // Check if the context is locked
         if (originalSigner != address(0)) {
             revert ProxyError.ContextConflict(originalSigner, msg.sender);
         }
 
-        _SIGNER_STORAGE.writeAddress(msg.sender);
+        _SIGNER.writeAddress(msg.sender);
     }
 
     /**
      * @notice Clear the context. If a critical task is in progress, the tx will be reverted.
      */
     function clear() internal {
-        uint256 criticalTaskCount = _CRITICAL_TASK_COUNT_STORAGE.readUint256();
+        uint256 criticalTaskCount = _CRITICAL_TASK_COUNT.readUint256();
 
         if (criticalTaskCount > 0) {
             revert ProxyError.CriticalTaskInProgress(criticalTaskCount);
         }
 
-        _SIGNER_STORAGE.writeAddress(address(0));
-        _KEEPER_STORAGE.writeAddress(address(0));
+        _SIGNER.writeAddress(address(0));
+        _KEEPER.writeAddress(address(0));
     }
 
     /*
@@ -63,8 +61,8 @@ library Context {
      * @param _newSigner The new signer's address.
      */
     function replaceSigner(address _newSigner) internal {
-        _KEEPER_STORAGE.writeAddress(signer());
-        _SIGNER_STORAGE.writeAddress(_newSigner);
+        _KEEPER.writeAddress(signer());
+        _SIGNER.writeAddress(_newSigner);
     }
 
     /**
@@ -72,8 +70,8 @@ library Context {
      * If the number of critical tasks in progress is greater than 0 at end of request, the request will be rejected.
      */
     function runCriticalTask() internal {
-        uint256 count = _CRITICAL_TASK_COUNT_STORAGE.readUint256();
-        _CRITICAL_TASK_COUNT_STORAGE.writeUint256(count + 1);
+        uint256 count = _CRITICAL_TASK_COUNT.readUint256();
+        _CRITICAL_TASK_COUNT.writeUint256(count + 1);
     }
 
     /**
@@ -81,27 +79,27 @@ library Context {
      * If the number of critical tasks in progress is 0, the request will be rejected.
      */
     function endCriticalTask() internal {
-        uint256 count = _CRITICAL_TASK_COUNT_STORAGE.readUint256();
+        uint256 count = _CRITICAL_TASK_COUNT.readUint256();
 
         // If no critical task is in progress, revert the transaction
         if (count == 0) {
             revert ProxyError.NoCriticalTask();
         }
 
-        _CRITICAL_TASK_COUNT_STORAGE.writeUint256(count - 1);
+        _CRITICAL_TASK_COUNT.writeUint256(count - 1);
     }
 
     /**
      * @notice Get the signer address.
      */
     function signer() internal view returns (address) {
-        return _SIGNER_STORAGE.readAddress();
+        return _SIGNER.readAddress();
     }
 
     /**
      * @notice Get the keeper address.
      */
     function keeper() internal view returns (address) {
-        return _KEEPER_STORAGE.readAddress();
+        return _KEEPER.readAddress();
     }
 }
