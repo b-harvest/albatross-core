@@ -3,7 +3,7 @@ pragma solidity >=0.6.0;
 
 import { StorageKey } from "src/types/CustomTypes.sol";
 
-/// @dev This interface is forked from the uniswap-v4-core repository
+/// @dev This interface is forked from the uniswap-v4-common repository
 interface IExtsload {
     /// @notice Called by external contracts to access granular pool state
     /// @param slot Key of slot to sload

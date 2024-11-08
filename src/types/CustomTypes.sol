@@ -3,11 +3,20 @@ pragma solidity ^0.8.0;
 
 type StorageKey is bytes32;
 
-/// @notice Never wrap Wallet type outside of Cash contract.
+/// <------- Perpetual Types ------->
+type Position is bytes32;
+
+type Pair is bytes32;
+
+/// <------- Lending Types ------->
+type Debt is bytes32;
+
+type Collateral is bytes32;
+
+/// <------- Core Types ------->
+/// @dev Never wrap common types outside of specific libraries !!!!
 type Wallet is bytes32;
 
-/// @notice Never wrap Cash type outside of Cash contract.
 type Cash is bytes32;
 
-/// @notice Never wrap Account type outside of Account contract.
 type Account is bytes32;

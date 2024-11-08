@@ -10,32 +10,26 @@ import { Role, RoleType } from "src/proxy/objects/Role.sol";
 import { ProxyError } from "src/proxy/errors/Error.sol";
 
 contract ProxyManager is IProxyManager {
-    function initialize(address _manager, address _facet) external override {
+    function initialize(address _admin, address _facet) external override {
         // Grant manager role to msg.sender
-        DiamondRBAC.authorize(_manager, RoleType.PROXY_MANAGER);
+        DiamondRBAC.authorize(_admin, RoleType.PROXY_ADMIN);
 
         // Set role of proxy management
-        DiamondFacet.set(IProxyManager.handOverManager.selector, _facet, RoleType.PROXY_MANAGER);
-        DiamondFacet.set(IProxyManager.setPublicFunc.selector, _facet, RoleType.PROXY_MANAGER);
-        DiamondFacet.set(IProxyManager.setAuthorizedFunc.selector, _facet, RoleType.PROXY_MANAGER);
-        DiamondFacet.set(IProxyManager.setRole.selector, _facet, RoleType.PROXY_MANAGER);
+        DiamondFacet.set(IProxyManager.handOverAdmin.selector, _facet, RoleType.PROXY_ADMIN);
+        DiamondFacet.set(IProxyManager.setRole.selector, _facet, RoleType.PROXY_ADMIN);
     }
 
-    function handOverManager(address _newManager) external override {
-        DiamondRBAC.unauthorize(Context.signer(), RoleType.PROXY_MANAGER);
-        DiamondRBAC.authorize(_newManager, RoleType.PROXY_MANAGER);
+    function setVersion(uint48 _newVersion) external {
+        DiamondRBAC.authorize(_newVersion, RoleType.PROXY_ADMIN);
     }
 
-    function setPublicFunc(bytes4 _funcSelector, address _facet) external override {
-        DiamondFacet.set(_funcSelector, _facet, RoleType.NONE);
-    }
-
-    function setAuthorizedFunc(bytes4 _funcSelector, address _facet, Role _requiredRole) external override {
-        DiamondFacet.set(_funcSelector, _facet, _requiredRole);
+    function handOverAdmin(address _newManager) external override {
+        DiamondRBAC.unauthorize(Context.signer(), RoleType.PROXY_ADMIN);
+        DiamondRBAC.authorize(_newManager, RoleType.PROXY_ADMIN);
     }
 
     function setRole(address _accessor, Role _role) external override {
-        if (_role == RoleType.PROXY_MANAGER) {
+        if (_role == RoleType.PROXY_ADMIN) {
             revert ProxyError.SetRoleAsProxyManager();
         }
         DiamondRBAC.authorize(_accessor, _role);

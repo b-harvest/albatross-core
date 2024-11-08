@@ -1,8 +1,6 @@
 //SPDX-License-Identifier: BUSL-1.1
 pragma solidity >=0.8.11 <0.9.0;
 
-import { Context } from "src/proxy/objects/Context.sol";
-
 import { IERC20 } from "src/utils/interfaces/IERC20.sol";
 import { SafeERC20 } from "src/utils/libraries/SafeERC20.sol";
 import { SafeCastU256 } from "src/utils/libraries/SafeCastU256.sol";
@@ -15,8 +13,8 @@ import { IdGenerator } from "src/storage/libraries/IdGenerator.sol";
 import { InternalStorage } from "src/storage/InternalStorage.sol";
 import { TransientStorage } from "src/storage/TransientStorage.sol";
 
-import { CashError } from "src/core/cash/errors/Error.sol";
-import { CashEvent } from "src/core/cash/events/Event.sol";
+import { CashError } from "src/common/cash/errors/Error.sol";
+import { CashEvent } from "src/common/cash/events/Event.sol";
 
 library CashFactory {
     using IdGenerator for StorageKey;
@@ -25,8 +23,8 @@ library CashFactory {
     using SafeCastU256 for uint256;
     using SafeERC20 for IERC20;
 
-    StorageKey private constant _WALLET = StorageKey.wrap(keccak256(abi.encode("src.core.cash.Wallet")));
-    StorageKey private constant _CASH = StorageKey.wrap(keccak256(abi.encode("src.core.cash.Cash")));
+    StorageKey private constant _WALLET = StorageKey.wrap(keccak256(abi.encode("src.common.cash.Wallet")));
+    StorageKey private constant _CASH = StorageKey.wrap(keccak256(abi.encode("src.common.cash.Cash")));
 
     /// In-Storage Object
     struct WalletData {

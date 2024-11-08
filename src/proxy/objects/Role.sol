@@ -12,7 +12,7 @@ function equal(Role _left, Role _right) pure returns (bool) {
 library RoleType {
     /// @dev It is dangerous if the same value exists.
     Role internal constant NONE = Role.wrap(0);
-    Role internal constant PROXY_MANAGER = Role.wrap(1);
+    Role internal constant PROXY_ADMIN = Role.wrap(1);
     Role internal constant ORACLE_CONFIG_ADMIN = Role.wrap(2);
 
     /// keeper

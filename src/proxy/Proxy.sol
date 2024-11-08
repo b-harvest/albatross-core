@@ -15,15 +15,15 @@ import { Extsload } from "src/utils/Extsload.sol";
 import { Exttload } from "src/utils/Exttload.sol";
 
 contract Proxy is Extsload, Exttload {
-    constructor(address _proxyManager) {
-        // Deploy if there is no existing proxy manager
-        if (_proxyManager == address(0)) {
-            _proxyManager = address(new ProxyManager());
+    constructor(address _admin, address _proxyManagerFacet, address _versionContract) {
+        // Deploy if there is no existing proxy admin contract
+        if (_proxyManagerFacet == address(0)) {
+            _proxyManagerFacet = address(new ProxyManager());
         }
 
         // Initialize Proxy Manager
         DelegateCall.callWithRevert(
-            _proxyManager, abi.encodeWithSelector(IProxyManager.initialize.selector, msg.sender, _proxyManager)
+            _proxyManagerFacet, abi.encodeWithSelector(IProxyManager.initialize.selector, _admin, _proxyManagerFacet)
         );
     }
 

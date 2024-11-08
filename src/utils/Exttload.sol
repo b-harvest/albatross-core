@@ -5,7 +5,7 @@ import { IExttload } from "src/utils/interfaces/IExttload.sol";
 import { StorageKey } from "src/types/CustomTypes.sol";
 
 /// @notice Enables public transient storage access for efficient state retrieval by external contracts.
-/// @dev This contract is forked from the uniswap-v4-core repository
+/// @dev This contract is forked from the uniswap-v4-common repository
 /// https://eips.ethereum.org/EIPS/eip-2330#rationale
 abstract contract Exttload is IExttload {
     /// @inheritdoc IExttload

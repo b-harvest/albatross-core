@@ -1,8 +1,8 @@
-// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: BUSL-1.1
 pragma solidity >=0.8.11 <0.9.0;
 
-import { Context } from "../../../proxy/objects/Context.sol";
-import { SafeCastBytes32 } from "../../../utils/libraries/SafeCastBytes32.sol";
+import { Context } from "src/proxy/objects/Context.sol";
+import { SafeCastBytes32 } from "src/utils/libraries/SafeCastBytes32.sol";
 
 import { StorageKey, Wallet, Cash, Account } from "src/types/CustomTypes.sol";
 import { StorageKeyLibrary } from "src/storage/libraries/StorageKeyLibrary.sol";
@@ -21,7 +21,7 @@ library AccountLibrary {
     using SafeCastBytes32 for bytes32;
 
     // Storage key for the account data
-    StorageKey private constant _ACCOUNT = StorageKey.wrap(keccak256(abi.encode("src.core.account.objects.Account")));
+    StorageKey private constant _ACCOUNT = StorageKey.wrap(keccak256(abi.encode("src.common.account.objects.Account")));
 
     /**
      * @dev Authorize an account.
