@@ -35,7 +35,9 @@ contract ProxyManager is IProxyManager {
     }
 
     function setRole(address _accessor, Role _role) external override {
-        require(!(_role == RoleType.PROXY_MANAGER), ProxyError.SetRoleAsProxyManager());
+        if (_role == RoleType.PROXY_MANAGER) {
+            revert ProxyError.SetRoleAsProxyManager();
+        }
         DiamondRBAC.authorize(_accessor, _role);
     }
 }

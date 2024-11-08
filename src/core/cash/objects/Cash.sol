@@ -42,7 +42,9 @@ library CashFactory {
         if (id > 2 ** 96) {
             revert CashError.WalletIdOverflow(id);
         }
-        wallet = Wallet.wrap((uint256(uint160(_erc20Address)) << 96) + id);
+        assembly {
+            wallet := or(shl(96, _erc20Address), id)
+        }
     }
 
     /// Transient-storage Object
@@ -57,7 +59,9 @@ library CashFactory {
             revert CashError.ERC20AddressZero();
         }
         uint256 id = _CASH.generateTransientId();
-        cash = Cash.wrap((uint256(uint160(_erc20Address)) << 96) + id);
+        assembly {
+            cash := or(shl(96, _erc20Address), id)
+        }
     }
 
     /**
@@ -179,24 +183,30 @@ library CashFactory {
     }
 
     /// <---- VIEW FUNCTIONS ---->
-    function ERC20Address(Wallet _cash) internal pure returns (address) {
-        return (Wallet.unwrap(_cash) >> 96).toAddress();
+    function ERC20Address(Wallet _wallet) internal pure returns (address addr) {
+        assembly {
+            // Unwrap the wallet and extract the upper 160 bits (excluding the last 96 bits)
+            addr := shr(96, _wallet)
+        }
     }
 
-    function ERC20Address(Cash _cash) internal pure returns (address) {
-        return (Cash.unwrap(_cash) >> 96).toAddress();
+    function ERC20Address(Cash _cash) internal pure returns (address addr) {
+        assembly {
+            // Unwrap the cash and extract the upper 160 bits (excluding the last 96 bits)
+            addr := shr(96, _cash)
+        }
     }
 
-    function initialized(Wallet _cash) internal pure returns (bool) {
-        return Wallet.unwrap(_cash) != 0;
+    function initialized(Wallet _wallet) internal pure returns (bool) {
+        return Wallet.unwrap(_wallet) != 0;
     }
 
     function initialized(Cash _cash) internal pure returns (bool) {
         return Cash.unwrap(_cash) != 0;
     }
 
-    function balance(Wallet _cash) internal view returns (uint256) {
-        return readWalletBalance(_cash);
+    function balance(Wallet _wallet) internal view returns (uint256) {
+        return readWalletBalance(_wallet);
     }
 
     function amount(Cash _cash) internal view returns (uint256) {
